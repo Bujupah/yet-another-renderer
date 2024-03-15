@@ -25,8 +25,8 @@ COPY assets /app/assets
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/chrome ./chrome
-COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
+RUN npm install --only=production
 
 EXPOSE ${PORT}
 
