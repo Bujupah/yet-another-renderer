@@ -1,0 +1,12 @@
+# Temporary files
+.data/
+.tmp/
+
+# chrome files
+chrome/
+
+# Build files
+dist/
+
+# Node modules
+node_modules/
