@@ -8,7 +8,7 @@ import expqueue from "express-queue";
 import express from "express";
 import morgan from "morgan";
 
-import { generateCSV, generatePDF, generatePNG, generateXLSX } from "./routes";
+import { generateCSV } from "./routes";
 import { cleanup, validator } from "./middlewares";
 import { env } from "process";
 
@@ -29,7 +29,7 @@ async function main() {
 
 	app.use(cleanup);
 
-	app.get("/", queue, (_, res) => {
+	app.get("/", (_, res) => {
 		res.send("Yet another grafana renderer");
 	});
 
@@ -41,10 +41,7 @@ async function main() {
 		res.json({ queue: queue.queue.getLength() });
 	});
 
-	app.get("/render", validator, generatePNG(browser));
-	app.get("/render/csv", validator, generateCSV(browser));
-	app.get("/render/pdf", validator, generatePDF(browser));
-	app.get("/render/xlsx", validator, generateXLSX(browser));
+	app.get("/render", validator, queue, generatePNG(browser));
 
 	app.all("*", (_, res) => {
 		res.status(200);
