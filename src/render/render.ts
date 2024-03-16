@@ -18,22 +18,18 @@ export class BaseRender {
 		this.context = await this.browser.createBrowserContext();
 		this.page = await this.context.newPage();
 		await this.setListener();
-		await this.setTimeZone(this.options.timezone);
-		await this.setViewport(
-			this.options.width,
-			this.options.height,
-			this.options.scaleFactor
-		);
-		await this.setRenderKey(this.options.renderKey, this.options.domain);
+		await this.setTimeZone();
+		await this.setViewport();
+		await this.setRenderKey();
 		await this.setLocale();
 	}
 
 	// navigate to page url and wait until network is idle
-	async navigate() {
-		await this.page.goto(this.options.url, {
+	async navigate(url?: string, timeout?: number) {
+		await this.page.goto(url || this.options.url, {
 			waitUntil: "networkidle0",
 			referrerPolicy: "no-referrer",
-			timeout: this.options.timeout * 1000,
+			timeout: timeout || this.options.timeout * 1000,
 		});
 	}
 
@@ -44,44 +40,44 @@ export class BaseRender {
 	}
 
 	// set page timezone based on user input
-	async setTimeZone(timezone: string) {
-		await this.page.emulateTimezone(timezone);
+	async setTimeZone(timezone?: string) {
+		await this.page.emulateTimezone(timezone || this.options.timezone);
 	}
 
 	// set page viewport width and height
-	async setViewport(width: number, height: number, scale: number) {
+	async setViewport(width?: number, height?: number, scale?: number) {
 		await this.page.setViewport({
-			width,
-			height,
-			deviceScaleFactor: scale,
+			width: width || this.options.width,
+			height: height || this.options.height,
+			deviceScaleFactor: scale || this.options.scaleFactor,
 		});
 	}
 
 	// set render key cookie
-	async setRenderKey(renderKey: string, domain: string) {
+	async setRenderKey(renderKey?: string, domain?: string) {
 		await this.page.setCookie({
 			name: "renderKey",
-			value: renderKey,
-			domain: domain,
+			value: renderKey || this.options.renderKey,
+			domain: domain || this.options.domain,
 		});
 	}
 
 	// set page language locale
-	async setLocale() {
+	async setLocale(locale?: string) {
 		await this.page.setExtraHTTPHeaders({
-			"Accept-Language": this.options.language,
+			"Accept-Language": locale || this.options.language,
 		});
 	}
 
 	// set page listener for console, error, pageerror, requestfailed, response
 	async setListener() {
-		this.page.on("console", (msg) => console.log("console:", msg.text()));
-		this.page.on("error", (err) => console.log("error:", err));
-		this.page.on("pageerror", (err) => console.log("page error:", err));
+		this.page.on("console", (msg) => console.debug("console:", msg.text()));
+		this.page.on("error", (err) => console.error("error:", err));
+		this.page.on("pageerror", (err) => console.error("page error:", err));
 		this.page.on("requestfailed", (req) =>
-			console.log("request failed:", req.url())
+			console.error("request failed:", req.url())
 		);
-		// this.page.on("response", (res) => console.log("response:", res.url()));
+		this.page.on("response", (res) => console.debug("response:", res.url()));
 	}
 
 	async render(): Promise<RenderResponse> {

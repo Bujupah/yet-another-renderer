@@ -1,13 +1,16 @@
 {
   "name": "yet-another-renderer",
-  "version": "1.0.0",
+  "version": "0.0.0+1",
   "state": "alpha",
   "description": "Yet another grafana renderer",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/app.js",
-    "build": "tsc",
+    "start": "node dist/app.js --serve",
+    "cli:info": "node dist/app.js --info",
+    "cli:help": "node dist/app.js --help",
+    "cli:version": "node dist/app.js --version",
     "get:chrome": "@puppeteer/browsers install chrome@124.0.6356.2",
+    "build": "tsc",
     "test": "echo \"Help me with tests\" && exit 0"
   },
   "keywords": [
@@ -15,15 +18,13 @@
     "renderer",
     "puppeteer"
   ],
+  "readme": "README.md",
+  "homepage": "https://github.com/bujupah/yet-another-renderer",
+  "bugs": {
+    "url": "https://github.com/bujupah/yet-another-renderer/issues",
+    "email": "khalil.mejdi97@gmail.com"
+  },
   "author": "Khalil Mejdi",
-  "badges": [
-    "https://img.shields.io/github/license/bujupah/yet-another-renderer",
-    "https://img.shields.io/github/issues/bujupah/yet-another-renderer",
-    "https://img.shields.io/github/stars/bujupah/yet-another-renderer",
-    "https://img.shields.io/github/forks/bujupah/yet-another-renderer",
-    "https://img.shields.io/github/issues-pr/bujupah/yet-another-renderer",
-    "https://img.shields.io/github/last-commit/bujupah/yet-another-renderer"
-  ],
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -36,6 +37,7 @@
     "@puppeteer/browsers": "^2.1.0",
     "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^20.11.27"
+    "@types/node": "^20.11.27",
+    "typescript": "^5.4.2"
   }
 }
