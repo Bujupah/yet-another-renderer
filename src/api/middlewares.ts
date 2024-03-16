@@ -1,16 +1,16 @@
-import dotenv from "dotenv";
-dotenv.config();
-
-import { env } from "process";
+import config from "../config";
 
 import * as fs from "fs";
 import { NextFunction } from "express";
-import { IRequest, IResponse, RenderType } from "./types";
+import { IRequest, IResponse, RenderType } from "../types";
 
 export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 	const authToken = req.headers["x-auth-token"];
 
-	if (authToken !== env.AUTH_SECRET_TOKEN && env.AUTH_SECRET_TOKEN !== "-") {
+	if (
+		authToken !== config.RENDER_AUTH_SECRET_TOKEN &&
+		config.RENDER_AUTH_SECRET_TOKEN !== "-"
+	) {
 		console.log("Unauthorized request");
 		const fileStream = fs.createReadStream("assets/unauthorized.png");
 		fileStream.pipe(res);
@@ -23,11 +23,11 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 		domain: req.query.domain as string,
 		encoding: req.query.encoding as string,
 		renderKey: req.query.renderKey as string,
-		timeout: +req.query.timeout || +env.RENDER_TIMEOUT,
-		timezone: (req.query.timezone as string) || env.RENDER_TZ,
-		scaleFactor: +req.query.deviceScaleFactor || +env.RENDER_SCALE,
-		height: +req.query.height || +env.RENDER_WIDTH,
-		width: +req.query.width || +env.RENDER_HEIGHT,
+		timeout: +req.query.timeout || config.RENDER_TIMEOUT,
+		timezone: (req.query.timezone as string) || config.RENDER_TZ,
+		scaleFactor: +req.query.deviceScaleFactor || config.RENDER_SCALE,
+		height: +req.query.height || config.RENDER_WIDTH,
+		width: +req.query.width || config.RENDER_HEIGHT,
 		language: req.headers["accept-language"] as string,
 	};
 

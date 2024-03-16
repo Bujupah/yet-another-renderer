@@ -1,9 +1,9 @@
 import * as fs from "fs";
 
 import { Browser } from "puppeteer";
-import { IRequest, IResponse } from "./types";
+import { IRequest, IResponse } from "../types";
 import { RequestHandler } from "express";
-import { RenderPNG } from "./render/png";
+import { RenderPNG } from "../render/png";
 
 export const generatePNG = (browser: Browser): RequestHandler => {
 	return async (req: IRequest, res: IResponse) => {
@@ -21,5 +21,22 @@ export const generatePNG = (browser: Browser): RequestHandler => {
 		// stream out the file to the response
 		const fileStream = fs.createReadStream(filePath);
 		fileStream.pipe(res);
+	};
+};
+export const generateCSV = (browser: Browser): RequestHandler => {
+	return async (req: IRequest, res: IResponse) => {
+		res.send("renderCSV");
+	};
+};
+
+export const generatePDF = (browser: Browser): RequestHandler => {
+	return async (req: IRequest, res: IResponse) => {
+		res.send("renderPDF");
+	};
+};
+
+export const generateXLSX = (browser: Browser): RequestHandler => {
+	return async (req: IRequest, res: IResponse) => {
+		res.send("renderXLSX");
 	};
 };
