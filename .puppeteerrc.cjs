@@ -1,4 +1,4 @@
-sconst { globSync } = require("glob");
+const { globSync } = require("glob");
 
 const pattern = "chrome/**/chrome{.exe,}";
 const files = globSync(pattern, { nodir: true, absolute: true });
@@ -10,7 +10,7 @@ if (files.length === 0) {
 }
 
 const executablePath = files[0]
-console.debug('Using chrome/headless at', executablePath)
+console.debug('Using chrome/headless at', executablePath, '\n')
 /**
  * @type {import("puppeteer").Configuration}
  */
