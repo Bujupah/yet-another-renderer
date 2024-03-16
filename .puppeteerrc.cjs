@@ -1,13 +1,20 @@
-const { join } = require('path');
+sconst { globSync } = require("glob");
 
+const pattern = "chrome/**/chrome{.exe,}";
+const files = globSync(pattern, { nodir: true, absolute: true });
+
+if (files.length === 0) {
+  console.warn('No chrome/headless found')
+  console.warn('Run `npm run get:chrome` to download the latest version of chrome/headless\n')
+  process.exit(0)
+}
+
+const executablePath = files[0]
+console.debug('Using chrome/headless at', executablePath)
 /**
  * @type {import("puppeteer").Configuration}
  */
 module.exports = {
-  // Changes the cache location for Puppeteer.
-  cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
-  browserRevision: 'stable',
-  defaultProduct: 'chrome',
-  executablePath: join(__dirname, 'chrome', 'win64-124.0.6356.2', 'chrome-win64', 'chrome.exe'),
+  executablePath: executablePath,
 };
 

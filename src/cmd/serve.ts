@@ -5,19 +5,16 @@ import expqueue from "express-queue";
 import express from "express";
 import morgan from "morgan";
 
-import {
-	generateCSV,
-	generatePDF,
-	generatePNG,
-	generateXLSX,
-} from "../api/routes";
-import { cleanup, validator } from "../api/middlewares";
+import { generatePNG } from "../api/routes";
+import { authenticator, cleanup, validator } from "../api/middlewares";
 
 import config from "../config";
 
-const { version: serviceVersion } = require("../../package.json");
-
 export async function serve() {
+	if (!fs.existsSync(".tmp")) {
+		fs.mkdirSync(".tmp");
+	}
+
 	const app = express();
 
 	app.use(express.json());
@@ -30,27 +27,25 @@ export async function serve() {
 
 	const browser = await puppeteer.launch({
 		headless: true,
-		args: ["--no-sandbox", "--disable-setuid-sandbox"],
+		args: ["--no-sandbox", "--disable-gpu"],
 	});
 
 	app.use(cleanup);
+	app.use(queue);
 
-	app.get("/", queue, (_, res) => {
+	app.get("/", (_, res) => {
 		res.send("Yet another grafana renderer");
 	});
 
 	app.get("/render/version", (_, res) => {
-		res.json({ status: "ok", version: serviceVersion });
+		res.json({ status: "ok", version: config.APP_VERSION });
 	});
+
+	app.get("/render", authenticator, validator, generatePNG(browser));
 
 	app.get("/in-queue", (_, res) => {
 		res.json({ queue: queue.queue.getLength() });
 	});
-
-	app.get("/render", validator, generatePNG(browser));
-	app.get("/render/csv", validator, generateCSV(browser));
-	app.get("/render/pdf", validator, generatePDF(browser));
-	app.get("/render/xlsx", validator, generateXLSX(browser));
 
 	app.all("*", (_, res) => {
 		res.status(200);
@@ -60,9 +55,11 @@ export async function serve() {
 
 	const server = app.listen(config.RENDER_PORT, async () => {
 		const browserVersion = await browser.version();
-		console.log(`Server running on port ${config.RENDER_PORT}`);
-		console.log(`\nBrowser version: ${browserVersion}`);
-		console.log(`Service version: ${config.APP_VERSION}`);
+		console.log(`> Server port: ${config.RENDER_PORT}`);
+		console.log(`> Server version: ${config.APP_VERSION}`);
+		console.log(`> Request Concurrency: ${config.RENDER_CONCURRENCY}`);
+		console.log(`> Request Queue limit: ${config.RENDER_QUEUE_LIMIT}`);
+		console.log(`> Browser version: ${browserVersion}`);
 		console.log("\n\nPress Ctrl+C to exit...");
 	});
 

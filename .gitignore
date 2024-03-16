@@ -3,7 +3,7 @@
 .tmp/
 
 # chrome files
-chrome/
+chrome**/
 
 # Build files
 dist/

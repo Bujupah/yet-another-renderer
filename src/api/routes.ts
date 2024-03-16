@@ -15,28 +15,10 @@ export const generatePNG = (browser: Browser): RequestHandler => {
 
 		// set headers and pipe file to response
 		res.status(200);
-		res.setHeader("x-grafana-filename", fileName);
 		res.setHeader("Content-Type", "image/png");
 
 		// stream out the file to the response
 		const fileStream = fs.createReadStream(filePath);
 		fileStream.pipe(res);
-	};
-};
-export const generateCSV = (browser: Browser): RequestHandler => {
-	return async (req: IRequest, res: IResponse) => {
-		res.send("renderCSV");
-	};
-};
-
-export const generatePDF = (browser: Browser): RequestHandler => {
-	return async (req: IRequest, res: IResponse) => {
-		res.send("renderPDF");
-	};
-};
-
-export const generateXLSX = (browser: Browser): RequestHandler => {
-	return async (req: IRequest, res: IResponse) => {
-		res.send("renderXLSX");
 	};
 };

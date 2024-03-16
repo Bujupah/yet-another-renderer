@@ -32,7 +32,7 @@ export class RenderPNG extends BaseRender {
 				y: 0,
 				height: this.options.height,
 				width: this.options.width,
-				scale: this.options.scaleFactor,
+				scale: this.options.scale,
 			},
 			optimizeForSpeed: true,
 			captureBeyondViewport: true,
