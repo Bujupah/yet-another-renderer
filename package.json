@@ -9,7 +9,7 @@
     "cli:info": "node dist/app.js --info",
     "cli:help": "node dist/app.js --help",
     "cli:version": "node dist/app.js --version",
-    "get:chrome": "@puppeteer/browsers install chrome@124.0.6356.2",
+    "get:chrome": "npx @puppeteer/browsers install chrome@stable",
     "build": "tsc",
     "test": "echo \"Help me with tests\" && exit 0"
   },
@@ -34,6 +34,7 @@
     "puppeteer": "^22.4.1"
   },
   "devDependencies": {
+    "glob": "^10.3.10",
     "@puppeteer/browsers": "^2.1.0",
     "@types/express": "^4.17.21",
     "@types/morgan": "^1.9.9",

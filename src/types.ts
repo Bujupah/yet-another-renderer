@@ -8,7 +8,7 @@ export type RenderRequest = {
 
 	width?: number;
 	height?: number;
-	scaleFactor: number;
+	scale: number;
 
 	domain: string;
 	renderKey: string;

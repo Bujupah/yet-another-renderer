@@ -49,7 +49,7 @@ export class BaseRender {
 		await this.page.setViewport({
 			width: width || this.options.width,
 			height: height || this.options.height,
-			deviceScaleFactor: scale || this.options.scaleFactor,
+			deviceScaleFactor: scale || this.options.scale,
 		});
 	}
 
