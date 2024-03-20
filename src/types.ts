@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 export type RenderRequest = {
 	type: RenderType;
-	url: string;
+	url: string[];
 	timezone: string;
 	timeout: number;
 
@@ -10,30 +10,44 @@ export type RenderRequest = {
 	height?: number;
 	scale: number;
 
+	landscape?: boolean;
+
 	domain: string;
 	renderKey: string;
 
-	encoding: string;
+	encoding: EncodingType;
 
 	language: string;
 };
 
 export type RenderResponse = {
+	folder: string;
 	fileName: string;
 	filePath: string;
 };
 
 export enum RenderType {
+	PANEL = "panel",
+	DASHBOARD = "dashboard",
+}
+
+export enum EncodingType {
 	PNG = "png",
 	PDF = "pdf",
-	CSV = "csv",
-	XLSX = "xlsx",
 }
 
 export interface IResponse extends Response {
-	filePath: string;
+	folder: string;
 }
 
 export interface IRequest extends Request {
 	opt: RenderRequest;
+}
+
+export interface PageInfo {
+	[key: string]: {
+		url: any[];
+		metrics: {};
+		status?: string;
+	};
 }

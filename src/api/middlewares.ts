@@ -1,8 +1,13 @@
-import config from "../config";
-
 import * as fs from "fs";
+
 import { NextFunction } from "express";
-import { IRequest, IResponse, RenderType } from "../types";
+import { EncodingType, IRequest, IResponse, RenderType } from "../types";
+
+import config from "../config";
+import utils from "../utils/utils";
+
+import morgan, { TokenIndexer } from "morgan";
+import Logger from "../logger";
 
 export function authenticator(
 	req: IRequest,
@@ -26,10 +31,10 @@ export function authenticator(
 
 export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 	req.opt = {
-		type: (req.query.type as RenderType) || RenderType.PNG,
-		url: req.query.url as string,
+		url: [],
+		type: RenderType.PANEL,
 		domain: req.query.domain as string,
-		encoding: req.query.encoding as string,
+		encoding: (req.query.encoding as EncodingType) || EncodingType.PNG,
 		renderKey: req.query.renderKey as string,
 		timeout: +req.query.timeout || config.RENDER_TIMEOUT,
 		timezone: (req.query.timezone as string) || config.RENDER_TZ,
@@ -48,13 +53,40 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 	}
 
 	if (
-		!req.opt.url.startsWith("http://") &&
-		!req.opt.url.startsWith("https://")
+		!(req.query.url as string).startsWith("http://") &&
+		!(req.query.url as string).startsWith("https://")
 	) {
 		console.error("url must be a http/https protocol");
 		const fileStream = fs.createReadStream("assets/error.png");
 		fileStream.pipe(res);
 		return;
+	}
+
+	const url = new URL(req.query.url as string);
+
+	const isPanel = url.pathname.includes("/d-solo/");
+	const isDashboard = url.pathname.includes("/d/");
+
+	if (!isPanel && !isDashboard) {
+		console.error("url must be /d or /d-solo", req.query.url);
+		const fileStream = fs.createReadStream("assets/error.png");
+		fileStream.pipe(res);
+		return;
+	}
+
+	if (isPanel) {
+		req.opt.type = RenderType.PANEL;
+	}
+
+	if (isDashboard) {
+		req.opt.type = RenderType.DASHBOARD;
+	}
+
+	const panelIds = (url.searchParams.get("panelId") as string).split(",");
+	for (const panelId of panelIds) {
+		const panelURL = url;
+		panelURL.searchParams.set("panelId", panelId.trim());
+		req.opt.url.push(panelURL.toString().replace("/d/", "/d-solo/"));
 	}
 
 	next();
@@ -63,13 +95,32 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 // create a middleware that checks the header after the request is processed
 export function cleanup(_: IRequest, res: IResponse, next: NextFunction) {
 	res.on("finish", () => {
-		if (res.filePath) {
-			fs.unlink(res.filePath, (err) => {
-				if (err) {
-					console.error(`Error deleting file: ${err.message}`);
-				}
-			});
-		}
+		utils.rmdir(res.folder);
 	});
 	next();
 }
+
+export const logger = () => {
+	const log = new Logger("http");
+	return morgan(
+		(
+			tokens: TokenIndexer<IRequest, IResponse>,
+			req: IRequest,
+			res: IResponse
+		) => {
+			const args = [
+				...["method", tokens.method(req, res)],
+				...["handler", req.route.path],
+				...["status", res.statusCode],
+				...["remote-addr", tokens["remote-addr"](req, res)],
+				...["duration", (tokens["response-time"](req, res) || 0) + "ms"],
+			];
+			if (+tokens.status(req, res) >= 400) {
+				log.error("Request completed with failure", ...args);
+			} else {
+				log.info("Request completed successfully", ...args);
+			}
+			return undefined;
+		}
+	);
+};
