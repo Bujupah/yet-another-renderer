@@ -1,4 +1,7 @@
 import dotenv from "dotenv";
+
+import { LogLevel, LogTimeFormat, LogType } from "./logger";
+
 const {
 	name: APP_NAME,
 	description: APP_DESCRIPTION,
@@ -21,6 +24,22 @@ const RENDER_HEIGHT = +process.env.RENDER_HEIGHT || 1024;
 const RENDER_TZ = process.env.RENDER_TZ || "Africa/Tunis";
 const RENDER_AUTH_SECRET_TOKEN = process.env.RENDER_AUTH_SECRET_TOKEN || "-";
 
+let LOG_LEVEL = (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO;
+let LOG_TYPE = (process.env.LOG_TYPE as LogType) || LogType.CONTEXT;
+let LOG_TIME_FORMAT = (process.env.LOG_TIME_FORMAT as LogTimeFormat) || "iso";
+
+if (![LogLevel.DEBUG, LogLevel.INFO].includes(LOG_LEVEL)) {
+	LOG_LEVEL = LogLevel.INFO;
+}
+
+if (![LogType.CONTEXT, LogType.JSON].includes(LOG_TYPE)) {
+	LOG_TYPE = LogType.CONTEXT;
+}
+
+if (LOG_TIME_FORMAT === "iso") {
+	LOG_TIME_FORMAT = "YYYY-MM-DD[T]HH:mm:ss.SSS[Z]";
+}
+
 // Export the variables
 export default {
 	APP_NAME,
@@ -38,4 +57,8 @@ export default {
 	RENDER_HEIGHT,
 	RENDER_TZ,
 	RENDER_AUTH_SECRET_TOKEN,
+
+	LOG_LEVEL,
+	LOG_TYPE,
+	LOG_TIME_FORMAT,
 };
