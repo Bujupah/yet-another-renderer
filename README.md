@@ -14,8 +14,8 @@ Yet another grafana backend that handles rendering panels and dashboards to PNGs
 
 This alternative plugin diverges from existing solutions by prioritizing efficiency, reducing dependencies, and enhancing functionality for remote server usage. It offers a streamlined approach to image rendering within Grafana, addressing specific pain points and providing additional features to cater to diverse user needs.
 
-- Supports PNG, PDF, and XLSX formats
-- Provides versatile options for image generation
+- Supports PNG, PDF, and XLSX formats (in-progress)
+- Provides versatile options for image/pdf/excel generation
 - Enables users to choose the desired format based on their needs
 
 ## Requirements
@@ -24,6 +24,18 @@ This alternative plugin diverges from existing solutions by prioritizing efficie
 - Chrome (Chromium) browser
 - Supported operating systems: Linux, Windows, macOS
 - Grafana plugin: [bujupah-renderer-app](https://github.com/bujupah/bujupah-renderer-app) (optional)
+
+## Todos
+- [x] Single Panel screenshot
+- [x] Multiple Panels screenshot
+- [x] Dashboard screenshot
+- [ ] Single Panel PDF
+- [ ] Multi Panel PDF
+- [ ] Dashboard PDF
+- [ ] Panel Excel
+- [ ] Multi Panel Excel
+- [ ] Dashboard Excel
+- [ ] Unit tests
 
 ## Getting started
 
@@ -100,21 +112,23 @@ npm run build
 # pnpm build
 ```
 
-### Memory and stuff
+---
+
+
+### Performance & Security
+#### Memory and stuff
 
 A substantial amount of memory is necessary for rendering images due to the resource-intensive nature of the process. It is advised to have at least 16GB of available memory on the system to accommodate these requirements.
 
 Fortunately, we've implemented a queueing system to address this challenge. This system effectively manages the workload by queuing requests and initiating the rendering process once resources become available. As a result, it alleviates the strain on the application and ensures that requests are handled efficiently, even during peak periods.
 
-### Security
+#### Security
 
 Re-using the same feature Grafana provided to address the security issues. </br>
 Please read the security section in readme from grafana-image-renderer repository.
 https://github.com/grafana/grafana-image-renderer#security
 
-### Testing
-
-Todo
+---
 
 ### Get involved
 
@@ -123,17 +137,6 @@ If you're interested to get involved to the project:
 - Join the community discussions on [GitHub Discussions](https://github.com/Bujupah/yet-another-renderer/discussions) to share feedback and ideas.
 - Report bugs or suggest feature requests via [GitHub Issues](https://github.com/Bujupah/yet-another-renderer/issues).
 - Contribute to the development by submitting pull requests or participating in discussions.
-
-### Contributors
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ### License
 
