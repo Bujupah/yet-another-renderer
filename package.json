@@ -1,7 +1,7 @@
 {
   "name": "yet-another-renderer",
-  "version": "0.0.0+1",
-  "state": "alpha",
+  "version": "0.0.1",
+  "state": "release",
   "description": "Yet another grafana renderer",
   "main": "index.js",
   "scripts": {
