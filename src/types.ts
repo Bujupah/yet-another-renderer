@@ -10,6 +10,10 @@ export type RenderRequest = {
 	height?: number;
 	scale: number;
 
+	logo?: string;
+	title?: string;
+	description?: string;
+
 	landscape?: boolean;
 
 	domain: string;

@@ -89,6 +89,21 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 		req.opt.url.push(panelURL.toString().replace("/d/", "/d-solo/"));
 	}
 
+	if (req.opt.encoding == EncodingType.PDF) {
+		req.opt.width = 794;
+		req.opt.height = 1123;
+
+		if (url.searchParams.get("landscape") === "true") {
+			req.opt.landscape = true;
+			req.opt.width = 1123;
+			req.opt.height = 794;
+		}
+
+		req.opt.logo = url.searchParams.get("logo");
+		req.opt.title = url.searchParams.get("title");
+		req.opt.description = url.searchParams.get("description");
+	}
+
 	next();
 }
 

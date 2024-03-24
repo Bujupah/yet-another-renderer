@@ -111,6 +111,33 @@ export class BaseRender {
 		utils.mkdir(`.tmp/${this.uuid}`);
 	}
 
+	protected async dashboard(): Promise<any> {
+		const dashboard = await this.page.evaluate(() => {
+			return (window as any).grafanaRuntime.getDashboardSaveModel();
+		});
+		return { title: dashboard.title, description: dashboard.description };
+	}
+
+	protected async user(): Promise<string> {
+		const user = await this.page.evaluate(() => {
+			return (
+				(window as any).grafanaBootData.user.name ||
+				(window as any).grafanaBootData.user.login
+			);
+		});
+		return user;
+	}
+
+	protected async timerange(): Promise<{ from: number; to: number }> {
+		const range = await this.page.evaluate(() => {
+			const { from, to } = (
+				window as any
+			).grafanaRuntime.getDashboardTimeRange();
+			return { from, to };
+		});
+		return range;
+	}
+
 	protected async merge() {
 		await utils.merge(
 			this.uuid,
