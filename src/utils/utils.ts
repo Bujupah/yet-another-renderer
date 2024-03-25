@@ -5,20 +5,27 @@ import png from "./png_utils";
 import { EncodingType } from "../types";
 
 function mkdir(folder: string, callback?: () => void) {
-	if (!fs.existsSync(folder)) {
+	if (!pathExists(folder)) {
 		fs.mkdirSync(folder);
 		callback?.();
 	}
 }
 
 function rmdir(folder: string) {
-	if (folder && fs.existsSync(folder)) {
+	if (pathExists(folder)) {
 		fs.rm(folder, { recursive: true, force: true }, (err) => {
 			if (err) {
 				console.error(`Error deleting folder: ${err.message}`);
 			}
 		});
 	}
+}
+
+function pathExists(file: string): boolean {
+	if (!file) {
+		return false;
+	}
+	return fs.existsSync(file);
 }
 
 async function merge(
@@ -55,5 +62,6 @@ export default {
 	mkdir,
 	rmdir,
 	merge,
+	pathExists,
 	interpolate,
 };
