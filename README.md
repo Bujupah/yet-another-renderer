@@ -1,4 +1,4 @@
-# Yet another grafana-renderer <img src="![assets/logo.png](https://github.com/Bujupah/yet-another-renderer/blob/master/assets/logo.png)" alt="Yet another renderer" width="50" style="margin-bottom:-15px"/>
+# Yet another grafana-renderer <img src="assets/logo.png" alt="Yet another renderer" width="50"/>
 [![Stars](https://img.shields.io/github/stars/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/stargazers)
 [![Forks](https://img.shields.io/github/forks/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/network/members)
 
