@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-
+import { env } from "process";
 import { LogLevel, LogTimeFormat, LogType } from "./logger";
 
 const {
@@ -14,19 +14,35 @@ const {
 dotenv.config();
 
 // Create variables from the environment variables
-const RENDER_PORT = +process.env.RENDER_PORT || 3001;
-const RENDER_TIMEOUT = +process.env.RENDER_TIMEOUT || 60;
-const RENDER_CONCURRENCY = +process.env.RENDER_CONCURRENCY || 5;
-const RENDER_QUEUE_LIMIT = +process.env.RENDER_QUEUE_LIMIT || -1;
-const RENDER_SCALE = +process.env.RENDER_SCALE || 1;
-const RENDER_WIDTH = +process.env.RENDER_WIDTH || 768;
-const RENDER_HEIGHT = +process.env.RENDER_HEIGHT || 1024;
-const RENDER_TZ = process.env.RENDER_TZ || "Africa/Tunis";
-const RENDER_AUTH_SECRET_TOKEN = process.env.RENDER_AUTH_SECRET_TOKEN || "-";
+const RENDER_PORT = +env.RENDER_PORT || 3001;
+const RENDER_TIMEOUT = +env.RENDER_TIMEOUT || 60;
+const RENDER_CONCURRENCY = +env.RENDER_CONCURRENCY || 5;
+const RENDER_QUEUE_LIMIT = +env.RENDER_QUEUE_LIMIT || -1;
+const RENDER_SCALE = +env.RENDER_SCALE || 1;
+const RENDER_WIDTH = +env.RENDER_WIDTH || 768;
+const RENDER_HEIGHT = +env.RENDER_HEIGHT || 1024;
+const RENDER_TZ = env.RENDER_TZ || "Africa/Tunis";
+const RENDER_AUTH_SECRET_TOKEN = env.RENDER_AUTH_SECRET_TOKEN || "-";
 
-let LOG_LEVEL = (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO;
-let LOG_TYPE = (process.env.LOG_TYPE as LogType) || LogType.CONTEXT;
-let LOG_TIME_FORMAT = (process.env.LOG_TIME_FORMAT as LogTimeFormat) || "iso";
+const RENDER_BRANDING_IMAGE = env.RENDER_BRANDING_IMAGE;
+
+const RENDER_PDF_COVER_TEMPLATE =
+	env.RENDER_PDF_COVER_TEMPLATE || "assets/template/default_cover.html";
+
+const RENDER_HEADER = env.RENDER_HEADER || "true";
+const RENDER_HEADER_TIME = env.RENDER_HEADER_TIME || "true";
+const RENDER_HEADER_CREATOR = env.RENDER_HEADER_CREATOR || "true";
+const RENDER_HEADER_TIME_FORMAT =
+	env.RENDER_HEADER_TIME_FORMAT || "YYYY/MM/DD HH:mm:ss z";
+
+const RENDER_FOOTER = env.RENDER_FOOTER || "true";
+const RENDER_FOOTER_TEXT =
+	env.RENDER_FOOTER_TEXT ||
+	`&copy; 2024 Yet-another-renderer. All rights reserved.`;
+
+let LOG_LEVEL = (env.LOG_LEVEL as LogLevel) || LogLevel.INFO;
+let LOG_TYPE = (env.LOG_TYPE as LogType) || LogType.CONTEXT;
+let LOG_TIME_FORMAT = (env.LOG_TIME_FORMAT as LogTimeFormat) || "iso";
 
 if (![LogLevel.DEBUG, LogLevel.INFO].includes(LOG_LEVEL)) {
 	LOG_LEVEL = LogLevel.INFO;
@@ -56,6 +72,18 @@ export default {
 	RENDER_WIDTH,
 	RENDER_HEIGHT,
 	RENDER_TZ,
+
+	RENDER_PDF_COVER_TEMPLATE,
+
+	RENDER_HEADER,
+	RENDER_HEADER_TIME,
+	RENDER_HEADER_CREATOR,
+	RENDER_HEADER_TIME_FORMAT,
+
+	RENDER_FOOTER,
+	RENDER_FOOTER_TEXT,
+
+	RENDER_BRANDING_IMAGE,
 	RENDER_AUTH_SECRET_TOKEN,
 
 	LOG_LEVEL,

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      width: 100lvw;
+      height: 100lvh;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section {
+      display: flex;
+      width: 50%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-width: 420px;
+      height: 50%;
+
+    }
+
+    .section>h1 {
+      font-size: 2em;
+      padding: 0 40px;
+    }
+
+    .section>p {
+      font-size: 1em;
+      padding: 0 40px;
+    }
+
+    .section:nth-child(1) {
+      align-items: flex-start;
+    }
+
+    .logo {
+      width: 60%;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo>img {
+      width: 100%;
+    }
+
+    .sep {
+      width: 1px;
+      background: #cdcdcd;
+      height: 100vh;
+      position: fixed;
+    }
+
+    nav {
+      width: 100%;
+      height: 30px;
+      background: #f2f2f2;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8em;
+      position: fixed;
+      visibility: [[header]];
+    }
+
+    nav>p {
+      padding: 0 20px;
+    }
+
+    footer {
+      width: 100%;
+      height: 30px;
+      background: #f2f2f2;
+      position: fixed;
+      bottom: 0;
+      display: flex;
+      visibility: [[footer]];
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <p style="visibility:[[headerShowCreator]]">Created by: [[headerCreator]]</p>
+    <p style="visibility:[[headerShowTime]]">Generated on: [[headerTime]]</p>
+  </nav>
+  <div class="container">
+    <div class="section">
+      <h1>[[title]]</h1>
+      <p>
+        [[description]]
+        </br>
+      <p style="font-size: .8rem;">from: [[from]] to: [[to]]</p>
+      </p>
+    </div>
+    <div class="sep"></div>
+    <div class="section">
+      <div class="logo">
+        <img src="[[logo]]" alt="logo" width="100%">
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>[[footerText]]</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.innerWidth < window.innerHeight) {
+        document.querySelector('.sep').style.display = 'none';
+
+        // Get the necessary elements
+        const container = document.querySelector('.container');
+        const section1 = document.querySelector('.section:nth-child(1)');
+        const section3 = document.querySelector('.section:nth-child(3)');
+        const logo = document.querySelector('.logo');
+        const sep = document.querySelector('.sep');
+
+        // Modify the CSS properties
+        container.style.flexDirection = 'column-reverse';
+        container.style.height = '100vh';
+
+        section1.style.justifyContent = 'flex-start';
+
+        section3.style.justifyContent = 'flex-end';
+        section3.style.alignItems = 'baseline';
+        section3.style.height = '40%';
+
+        logo.style.width = '200px';
+        logo.style.paddingLeft = '40px';
+
+        sep.style.display = 'none';
+        sep.style.background = 'none';
+      }
+    });
+  </script>
+</body>
+
+</html>

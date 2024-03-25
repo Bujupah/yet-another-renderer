@@ -1,5 +1,6 @@
 import * as fs from "fs";
-import img_join from "combine-image";
+import pdf from "./pdf_utils";
+import png from "./png_utils";
 
 import { EncodingType } from "../types";
 
@@ -26,20 +27,33 @@ async function merge(
 	type: EncodingType
 ): Promise<string> {
 	if (type === EncodingType.PDF) {
-		throw new Error("PDF merge not implemented");
-	}
-	const filepath = `.tmp/${uid}/merged.png`;
-	const data = await img_join(files, { direction: "row" });
-	return await new Promise((resolve, reject) => {
-		data.write(filepath, (err: Error) => {
-			if (err) reject(err);
-			else resolve(filepath);
+		await pdf.create({
+			uid,
+			files,
+			keywords: ["pdf", "grafana", "renderer"],
+			title: "Report Preview",
 		});
-	});
+		return;
+	}
+	if (type === EncodingType.PNG) {
+		await png.create(uid, files);
+		return;
+	}
+	throw new Error("Invalid encoding type");
+}
+
+function interpolate(content: string, object: { [key: string]: any }): string {
+	const keys = Object.keys(object);
+	for (const key of keys) {
+		const regex = new RegExp(`\\[\\[${key}\\]\\]`, "g");
+		content = content.replace(regex, object[key]);
+	}
+	return content;
 }
 
 export default {
 	mkdir,
 	rmdir,
 	merge,
+	interpolate,
 };

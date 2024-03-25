@@ -31,8 +31,8 @@ export async function serve() {
 
 	log.debug("Launching browser");
 	const browser = await puppeteer.launch({
-		headless: true,
-		args: ["--no-sandbox", "--disable-gpu"],
+		headless: "shell",
+		args: ["--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
 	});
 
 	app.use(cleanup);
