@@ -92,8 +92,12 @@ export async function serve() {
 	});
 
 	app.all("*", (_, res) => {
-		const fileStream = fs.createReadStream("assets/not-found.png");
-		fileStream.pipe(res.status(200));
+		if (utils.pathExists("assets/not-found.png")) {
+			const fileStream = fs.createReadStream("assets/not-found.png");
+			fileStream.pipe(res);
+			return;
+		}
+		res.status(404).send("Not Found");
 	});
 
 	const server = app.listen(config.RENDER_PORT, async () => {

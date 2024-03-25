@@ -1,5 +1,4 @@
-# Yet another grafana-renderer
-
+# Yet another grafana-renderer <img src="![assets/logo.png](https://github.com/Bujupah/yet-another-renderer/blob/master/assets/logo.png)" alt="Yet another renderer" width="50" style="margin-bottom:-15px"/>
 [![Stars](https://img.shields.io/github/stars/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/stargazers)
 [![Forks](https://img.shields.io/github/forks/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/network/members)
 
@@ -26,12 +25,13 @@ This alternative plugin diverges from existing solutions by prioritizing efficie
 - Grafana plugin: [bujupah-renderer-app](https://github.com/bujupah/bujupah-renderer-app) (optional)
 
 ## Todos
+
 - [x] Single Panel screenshot
 - [x] Multiple Panels screenshot
 - [x] Dashboard screenshot
-- [ ] Single Panel PDF
-- [ ] Multi Panel PDF
-- [ ] Dashboard PDF
+- [x] Single Panel PDF
+- [x] Multi Panel PDF
+- [x] Dashboard PDF
 - [ ] Panel Excel
 - [ ] Multi Panel Excel
 - [ ] Dashboard Excel
@@ -114,8 +114,8 @@ npm run build
 
 ---
 
-
 ### Performance & Security
+
 #### Memory and stuff
 
 A substantial amount of memory is necessary for rendering images due to the resource-intensive nature of the process. It is advised to have at least 16GB of available memory on the system to accommodate these requirements.

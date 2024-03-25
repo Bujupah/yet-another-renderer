@@ -21,10 +21,12 @@ export function authenticator(
 		authToken !== config.RENDER_AUTH_SECRET_TOKEN &&
 		config.RENDER_AUTH_SECRET_TOKEN !== "-"
 	) {
-		console.error("Unauthorized request");
-		const fileStream = fs.createReadStream("assets/unauthorized.png");
-		fileStream.pipe(res);
-		return;
+		if (utils.pathExists("assets/unauthorized.png")) {
+			const fileStream = fs.createReadStream("assets/unauthorized.png");
+			fileStream.pipe(res);
+			return;
+		}
+		res.status(401).send("Unauthorized request");
 	}
 
 	next();
@@ -47,9 +49,12 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 
 	// validate the req.query.url and it must be a http/https protocol
 	if (!req.opt.url) {
-		console.error("url is required");
-		const fileStream = fs.createReadStream("assets/error.png");
-		fileStream.pipe(res);
+		if (utils.pathExists("assets/error.png")) {
+			const fileStream = fs.createReadStream("assets/error.png");
+			fileStream.pipe(res);
+			return;
+		}
+		res.status(400).send("Invalid request: url is missing in the query params");
 		return;
 	}
 
@@ -57,9 +62,12 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 		!(req.query.url as string).startsWith("http://") &&
 		!(req.query.url as string).startsWith("https://")
 	) {
-		console.error("url must be a http/https protocol");
-		const fileStream = fs.createReadStream("assets/error.png");
-		fileStream.pipe(res);
+		if (utils.pathExists("assets/error.png")) {
+			const fileStream = fs.createReadStream("assets/error.png");
+			fileStream.pipe(res);
+			return;
+		}
+		res.status(400).send("Invalid request: url must be a http/https protocol");
 		return;
 	}
 
@@ -69,9 +77,12 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 	const isDashboard = url.pathname.includes("/d/");
 
 	if (!isPanel && !isDashboard) {
-		console.error("url must be /d or /d-solo", req.query.url);
-		const fileStream = fs.createReadStream("assets/error.png");
-		fileStream.pipe(res);
+		if (utils.pathExists("assets/error.png")) {
+			const fileStream = fs.createReadStream("assets/error.png");
+			fileStream.pipe(res);
+			return;
+		}
+		res.status(400).send("Invalid request: url must be /d or /d-solo");
 		return;
 	}
 
