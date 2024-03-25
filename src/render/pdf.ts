@@ -32,11 +32,16 @@ export class RenderPDF extends BaseRender {
 					await this.get_pdf(`.tmp/${this.uuid}/${i}.pdf`);
 				}
 
-				const creator = await this.user();
+				const creator = await this.user(this.options.headerCreator == false);
+				const title = await this.title(!!!this.options.title);
+				const description = await this.description(!!!this.options.description);
 				const timerange = await this.timerange();
-				const dashboard = await this.dashboard();
 
-				await this.cover({ creator, timerange, dashboard });
+				await this.cover({
+					creator,
+					timerange,
+					dashboard: { title, description },
+				});
 				await this.get_pdf(`.tmp/${this.uuid}/cover.pdf`);
 
 				await this.merge();
@@ -60,32 +65,40 @@ export class RenderPDF extends BaseRender {
 	}
 
 	// Todo: lot of work to be done here, but will keep it this way for now.
+	/**
+	 * Create a cover page for the PDF
+	 * @param creator The creator of the dashboard
+	 * @param timerange contains the from and to time of the dashboard
+	 * @param dashboard contains the title and description of the dashboard
+	 *
+	 * @returns void
+	 **/
 	private async cover({ creator, timerange, dashboard }) {
 		// read template file
-		const template = readFileSync("assets/template/default_cover.html", "utf8");
+		const template = readFileSync(this.options.coverTemplate, "utf8");
 		const cover = utils.interpolate(template, {
 			title: this.options.title || dashboard.title,
 			description: this.options.description || dashboard.description || "",
 			logo: this.options.logo,
 
-			header: "flex",
+			header: this.options.header ? "" : "hidden",
 			headerCreator: creator,
-			headerShowCreator: creator ? "" : "hidden",
+			headerShowCreator: this.options.headerCreator ? "" : "hidden",
 
 			headerTime: moment()
 				.tz(this.options.timezone)
-				.format("YYYY/MM/DD HH:mm:ss z"),
-			headerShowTime: "flex" ? "" : "hidden",
+				.format(this.options.headerTimeformat),
+			headerShowTime: this.options.headerTime ? "" : "hidden",
 
 			from: moment(timerange.from)
 				.tz(this.options.timezone)
-				.format("YYYY/MM/DD HH:mm:ss z"),
+				.format(this.options.headerTimeformat),
 			to: moment(timerange.to)
 				.tz(this.options.timezone)
-				.format("YYYY/MM/DD HH:mm:ss z"),
+				.format(this.options.headerTimeformat),
 
-			footer: "flex",
-			footerText: `&copy; 2024 Yet-another-renderer. All rights reserved.`,
+			footer: this.options.footer ? "" : "hidden",
+			footerText: this.options.footerText,
 		});
 
 		await this.page.setContent(cover);

@@ -8,6 +8,7 @@ import utils from "../utils/utils";
 
 import morgan, { TokenIndexer } from "morgan";
 import Logger from "../logger";
+import default_logo from "../utils/default_logo";
 
 export function authenticator(
 	req: IRequest,
@@ -99,9 +100,25 @@ export function validator(req: IRequest, res: IResponse, next: NextFunction) {
 			req.opt.height = 794;
 		}
 
-		req.opt.logo = url.searchParams.get("logo");
 		req.opt.title = url.searchParams.get("title");
 		req.opt.description = url.searchParams.get("description");
+
+		req.opt.logo =
+			url.searchParams.get("logo") ||
+			config.RENDER_BRANDING_IMAGE ||
+			default_logo;
+
+		req.opt.coverTemplate = config.RENDER_PDF_COVER_TEMPLATE;
+
+		req.opt.headerTimeformat = config.RENDER_HEADER_TIME_FORMAT;
+		req.opt.headerCreator = config.RENDER_HEADER_CREATOR === "true";
+		req.opt.headerTime = config.RENDER_HEADER_TIME === "true";
+		req.opt.header =
+			(req.opt.headerCreator || req.opt.headerTime) &&
+			config.RENDER_HEADER === "true";
+
+		req.opt.footer = config.RENDER_FOOTER === "true";
+		req.opt.footerText = config.RENDER_FOOTER_TEXT;
 	}
 
 	next();

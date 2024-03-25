@@ -111,14 +111,24 @@ export class BaseRender {
 		utils.mkdir(`.tmp/${this.uuid}`);
 	}
 
-	protected async dashboard(): Promise<any> {
+	protected async title(ignore = false): Promise<any> {
+		if (ignore) return;
 		const dashboard = await this.page.evaluate(() => {
 			return (window as any).grafanaRuntime.getDashboardSaveModel();
 		});
-		return { title: dashboard.title, description: dashboard.description };
+		return dashboard.title;
 	}
 
-	protected async user(): Promise<string> {
+	protected async description(ignore = false): Promise<any> {
+		if (ignore) return;
+		const dashboard = await this.page.evaluate(() => {
+			return (window as any).grafanaRuntime.getDashboardSaveModel();
+		});
+		return dashboard.description;
+	}
+
+	protected async user(ignore = false): Promise<string> {
+		if (ignore) return;
 		const user = await this.page.evaluate(() => {
 			return (
 				(window as any).grafanaBootData.user.name ||
@@ -128,7 +138,10 @@ export class BaseRender {
 		return user;
 	}
 
-	protected async timerange(): Promise<{ from: number; to: number }> {
+	protected async timerange(
+		ignore = false
+	): Promise<{ from: number; to: number }> {
+		if (ignore) return;
 		const range = await this.page.evaluate(() => {
 			const { from, to } = (
 				window as any

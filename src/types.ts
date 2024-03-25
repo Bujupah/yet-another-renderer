@@ -4,24 +4,35 @@ export type RenderRequest = {
 	type: RenderType;
 	url: string[];
 	timezone: string;
+  
 	timeout: number;
-
+  
 	width?: number;
 	height?: number;
 	scale: number;
-
+  
 	logo?: string;
 	title?: string;
 	description?: string;
-
+  
 	landscape?: boolean;
-
+  
 	domain: string;
 	renderKey: string;
-
+  
 	encoding: EncodingType;
-
+  
 	language: string;
+  
+	coverTemplate?: string;
+  
+	header?: boolean;
+	headerTimeformat?: string;
+	headerTime?: boolean;
+	headerCreator?: boolean;
+
+	footer?: boolean;
+	footerText?: string;
 };
 
 export type RenderResponse = {
