@@ -1,4 +1,9 @@
-# Yet another grafana-renderer <img src="assets/logo.png" alt="Yet another renderer" width="50"/>
+# Yet another grafana-renderer
+
+
+<div style="width=100%">
+  <img src="assets/logo.png" alt="Yet another renderer" width="280"/>
+  
 [![Stars](https://img.shields.io/github/stars/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/stargazers)
 [![Forks](https://img.shields.io/github/forks/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/network/members)
 
@@ -7,6 +12,7 @@
 [![Pull Requests](https://img.shields.io/github/issues-pr/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/pulls)
 [![Last Commit](https://img.shields.io/github/last-commit/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/commits/master)
 
+</div>
 Yet another grafana backend that handles rendering panels and dashboards to PNGs using a headless browser (Chromium).
 
 ## Why another grafana-image-renderer
