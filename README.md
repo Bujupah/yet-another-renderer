@@ -13,7 +13,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/bujupah/yet-another-renderer)](https://github.com/bujupah/yet-another-renderer/commits/master)
 
 </div>
-Yet another grafana backend that handles rendering panels and dashboards to PNGs using a headless browser (Chromium).
+Yet another grafana backend that handles rendering panels and dashboards to PNGs and PDFs using a headless browser (Chromium).
 
 ## Why another grafana-image-renderer
 
